@@ -1,4 +1,4 @@
-package chat
+package main
 
 type commandID int
 

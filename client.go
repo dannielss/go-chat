@@ -1,9 +1,9 @@
-package chat
+package main
 
 import "net"
 
 type client struct {
-	conn     net.Addr
+	conn     net.Conn
 	nick     string
 	room     *room
 	commands chan<- command
