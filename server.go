@@ -17,6 +17,23 @@ func newServer() *server {
 	}
 }
 
+func (s *server) run() {
+	for cmd := range s.commands {
+		switch cmd.id {
+		case CMD_NICK:
+			s.nick()
+		case CMD_JOIN:
+			s.join()
+		case CMD_ROOMS:
+			s.rooms()
+		case CMD_MSG:
+			s.msg()
+		case CMD_QUIT:
+			s.quit()
+		}
+	}
+}
+
 func (s *server) newClient(conn net.Conn) {
 	log.Printf("new client has connected: %s", conn.RemoteAddr().String())
 
@@ -25,4 +42,6 @@ func (s *server) newClient(conn net.Conn) {
 		nick:     "anonymous",
 		commands: s.commands,
 	}
+
+	c.readInput()
 }
