@@ -21,15 +21,15 @@ func (s *server) run() {
 	for cmd := range s.commands {
 		switch cmd.id {
 		case CMD_NICK:
-			s.nick()
+			s.nick(cmd.client, cmd.args)
 		case CMD_JOIN:
-			s.join()
+			s.join(cmd.client, cmd.args)
 		case CMD_ROOMS:
-			s.rooms()
+			s.listRooms(cmd.client, cmd.args)
 		case CMD_MSG:
-			s.msg()
+			s.msg(cmd.client, cmd.args)
 		case CMD_QUIT:
-			s.quit()
+			s.quit(cmd.client, cmd.args)
 		}
 	}
 }
@@ -44,4 +44,24 @@ func (s *server) newClient(conn net.Conn) {
 	}
 
 	c.readInput()
+}
+
+func (s *server) nick(c *client, args []string) {
+
+}
+
+func (s *server) join(c *client, args []string) {
+
+}
+
+func (s *server) listRooms(c *client, args []string) {
+
+}
+
+func (s *server) msg(c *client, args []string) {
+
+}
+
+func (s *server) quit(c *client, args []string) {
+
 }
