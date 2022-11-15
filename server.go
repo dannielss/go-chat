@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"net"
 )
@@ -47,11 +48,25 @@ func (s *server) newClient(conn net.Conn) {
 }
 
 func (s *server) nick(c *client, args []string) {
-
+	c.nick = args[1]
+	c.msg(fmt.Sprintf("all right, I will call you %s", c.nick))
 }
 
 func (s *server) join(c *client, args []string) {
+	roomName := args[1]
 
+	r, ok := s.rooms[roomName]
+	if !ok {
+		r = &room{
+			name: roomName,
+			members: make(map[net.Addr]*client)
+		}
+		s.rooms[roomName] = r
+	}
+
+	r.members[c.conn.RemoteAddr()] = c
+
+	c.room = r
 }
 
 func (s *server) listRooms(c *client, args []string) {
@@ -64,4 +79,11 @@ func (s *server) msg(c *client, args []string) {
 
 func (s *server) quit(c *client, args []string) {
 
+}
+
+func (s *server) quitCurrentRoom(c *client) {
+	if c.room != nil {
+		delete(c.room.members, c.conn.RemoteAddr())
+		c.room.broadcast(c, fmt.Sprintf("%s has left the room", c.nick))
+	}
 }
