@@ -66,7 +66,12 @@ func (s *server) join(c *client, args []string) {
 
 	r.members[c.conn.RemoteAddr()] = c
 
+	s.quitCurrentRoom(c)
+
 	c.room = r
+
+	r.broadcast(c, fmt.Sprintf("%s has joined the room", c.nick))
+	c.msg(fmt.Sprintf("welcome to %s", r.name))
 }
 
 func (s *server) listRooms(c *client, args []string) {
